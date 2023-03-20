@@ -1,0 +1,5 @@
+ANSWER_ID, CONTENT, QUESTION_ID, EXAM_ID, ANSWER_TYPE, IS_CORRECT
+0, Delhi, 0, 0, 0, 1
+1, Chandigarh, 0, 0, 0, 0
+2, Mumbai, 0, 0, 0, 0
+3, Himachal Pradesh, 0, 0, 0, 0
