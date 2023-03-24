@@ -97,7 +97,7 @@ public class DB {
         }
     }
 
-    static DB getDataBase() {
+    public static DB getDataBase() {
         if (db == null) {
             // initialize DB
             db = new DB();
@@ -186,14 +186,36 @@ public class DB {
         return updateRow(q);
     }
 
+    public Object[] getQuestions(int exam_id) {
+        if (!checkConnection()) 
+            return null;
+        try {
+            Statement s = conn.createStatement();
+            String q = "SELECT * FROM QUESTION WHERE EXAM_ID=" + exam_id + ";";
+            ResultSet rs = s.executeQuery(q);
+            ArrayList<Integer> res = new ArrayList<Integer>();
+
+            while (rs.next()) {
+                int id = rs.getInt("QUESTION_ID");
+                res.add(id);
+            }
+
+            return res.toArray();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Student getStudent(int id) {
         if (!checkConnection())
             return null;
         try {
             Statement s = conn.createStatement();
-            String q = "SELECT * FROM STUDENT WHERE STUDENT_ID='" + id + "';";
+            String q = "SELECT * FROM STUDENT WHERE STUDENT_ID=" + id + ";";
             ResultSet rs = s.executeQuery(q);
-            if (rs.first()) {
+            if (rs.next()) {
                 String name = rs.getString("NAME");
 
                 return new Student(id, name);
@@ -321,12 +343,12 @@ public class DB {
         }
     }
 
-    public boolean verifyPassword(Student student, String password) {
+    public boolean verifyPassword(int student_id, String password) {
         if (!checkConnection())
             return false;
         try {
             Statement s = conn.createStatement();
-            String q = "SELECT * FROM STUENDT WHERE STUDENT_ID='" + student.id + "';";
+            String q = "SELECT * FROM STUDENT WHERE STUDENT_ID='" + student_id + "';";
             ResultSet rs = s.executeQuery(q);
             if (rs.first()) {
                 String p = rs.getString("PASSWORD");
@@ -341,7 +363,7 @@ public class DB {
     }
 
     public boolean enrollStudent(int student_id, int exam_id) {
-        String q = "INSERT INTO EXAM_ENROLLED(STUENT_ID, EXAM_ID) VALUES ('" + student_id + "', '" + exam_id + "');";
+        String q = "INSERT INTO EXAM_ENROLLED(STUDENT_ID, EXAM_ID) VALUES ('" + student_id + "', '" + exam_id + "');";
         return updateRow(q);
     }
 
@@ -367,6 +389,8 @@ public class DB {
 
     public static void main(String[] args) {
         DB database = DB.getDataBase();
+        Student s = database.getStudent(0);
+        System.out.println(s.name);
         database.closeConnection();
     }
 
