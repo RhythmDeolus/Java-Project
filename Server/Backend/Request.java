@@ -23,7 +23,7 @@ public class Request {
         if (line != null && parts.length > 1) {
             String type = parts[1];
             line = in.readLine();
-            System.out.println(line);
+            // System.out.println(line);
             parts = line.split(" ");
             String path = parts[0];
             int noLines = Integer.parseInt(parts[1]);

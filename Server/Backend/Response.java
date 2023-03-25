@@ -23,6 +23,7 @@ public class Response<T> {
         
         res_str += res_text;
 
+        // System.out.println(res_text);
         out.writeUTF(res_str);
     }
 
@@ -43,7 +44,7 @@ public class Response<T> {
                 e.printStackTrace();
             }
         }
-
+        // System.out.println(res_str);
         out.writeUTF(res_str);
     
     }
