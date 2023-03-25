@@ -75,16 +75,10 @@ public class Server {
                 } else if (req.path.equals("/answer")) {
                     if (req.props.containsKey("answer_id")) {
                         int answer_id = Integer.parseInt((String)req.props.get("answer_id"));
+                        // System.out.println(answer_id);
                         Answer q = db.getAnswer(answer_id);
                         Response<Answer> rs = new Response<Answer>(q);
                         rs.sendResponse(clientSocket, "/answer");
-                    }
-                } else if (req.path.equals("/exam")) {
-                    if (req.props.containsKey("exam_id")) {
-                        int exam_id = Integer.parseInt((String)req.props.get("exam_id"));
-                        Exam e = db.getExam(exam_id);
-                        Response<Exam> rs = new Response<Exam>(e);
-                        rs.sendResponse(clientSocket, "/exam");
                     }
                 } else if (req.path.equals("/exam")) {
                     if (req.props.containsKey("exam_id")) {

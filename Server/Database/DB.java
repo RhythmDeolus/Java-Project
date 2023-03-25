@@ -139,7 +139,7 @@ public class DB {
         try {
             Statement s = conn.createStatement();
             ResultSet rs = s.executeQuery(q);
-            if (rs.first())
+            if (rs.next())
                 return true;
             else
                 return false;
@@ -156,7 +156,7 @@ public class DB {
             Statement s = conn.createStatement();
             String q = "SELECT * FROM EXAM WHERE EXAM_ID='" + id + "';";
             ResultSet rs = s.executeQuery(q);
-            if (rs.first()) {
+            if (rs.next()) {
                 String name = rs.getString("NAME");
                 Date startDate = rs.getDate("START_TIME");
                 Date endDate = rs.getDate("END_TIME");
@@ -251,7 +251,7 @@ public class DB {
             Statement s = conn.createStatement();
             String q = "SELECT * FROM QUESTION WHERE QUESTION_ID='" + id + "';";
             ResultSet rs = s.executeQuery(q);
-            if (rs.first()) {
+            if (rs.next()) {
                 String statement = rs.getString("STATEMENT");
                 int type = rs.getInt("QUESTION_TYPE");
                 int exam_id = rs.getInt("EXAM_ID");
@@ -286,9 +286,9 @@ public class DB {
             return null;
         try {
             Statement s = conn.createStatement();
-            String q = "SELECT * FROM ANSWER WHERE ANSWER_ID='" + id + "';";
+            String q = "SELECT * FROM ANSWER WHERE ANSWER_ID=" + id + ";";
             ResultSet rs = s.executeQuery(q);
-            if (rs.first()) {
+            if (rs.next()) {
                 String content = rs.getString("CONTENT");
                 int question_id = rs.getInt("QUESTION_ID");
                 int exam_id = rs.getInt("EXAM_ID");
@@ -333,8 +333,9 @@ public class DB {
                 int question_id = rs.getInt("QUESTION_ID");
                 int exam_id = rs.getInt("EXAM_ID");
                 int type = rs.getInt("ANSWER_TYPE");
+                int answer_id = rs.getInt("ANSWER_ID");
                 boolean isCorrect = rs.getBoolean("IS_CORRECT");
-                result.add(new Answer(id, content, question_id, exam_id, type, isCorrect));
+                result.add(new Answer(answer_id, content, question_id, exam_id, type, isCorrect));
             }
             return result;
         } catch (SQLException e) {
@@ -350,7 +351,7 @@ public class DB {
             Statement s = conn.createStatement();
             String q = "SELECT * FROM STUDENT WHERE STUDENT_ID='" + student_id + "';";
             ResultSet rs = s.executeQuery(q);
-            if (rs.first()) {
+            if (rs.next()) {
                 String p = rs.getString("PASSWORD");
                 if (p.equals(password))
                     return true;
