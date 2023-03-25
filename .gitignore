@@ -1,4 +1,4 @@
 *.class
 source.txt
-*.config
+# *.config
 Test.java
