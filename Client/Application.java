@@ -1,27 +1,39 @@
+package Client;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import java.awt.Window;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.event.*;
 
-import Pages.*;
+import Client.Backend.Connection;
+import Client.Backend.Response;
+import Client.Pages.*;
 
 
-public class Application extends JFrame  {
-    // public LoginFrame lf;
-    // public QuizPage qp;
-
+public class Application extends ApplicationInterface  {
+    public LoginFrame lf;
+    public OnlineExamUI oeui;
+    private Connection conn;
+    private Dimension screenBounds;
     public Application(){
-        LoginFrame lf = new LoginFrame(this);
-        QuizPage qp = new QuizPage();
+
+        conn = new Connection();
+        lf = new LoginFrame(this);
+        oeui = new OnlineExamUI(this);
         setTitle("Online Exam");
+
         
         getContentPane().setLayout(new CardLayout());
 
         add(lf);
-        add(qp);
+        add(oeui);
 
         pack();
         setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
     public static void main(String[] args) throws InterruptedException {
        Application a = new Application();
@@ -32,5 +44,22 @@ public class Application extends JFrame  {
     //     cl.next(a.getContentPane());
     //    }
 
-    }    
+    }
+    @Override
+    public void login(int id, String password) {
+        Response r = conn.verifyStudent(id, password);
+        if (r.props.containsKey("T")) {
+            CardLayout cl = (CardLayout) getContentPane().getLayout();
+            cl.next(getContentPane());
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            dispose();
+            setUndecorated(true);
+            setVisible(true);
+        } else {
+            //  login failed
+            System.out.println("Login failed");
+            JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+        }
+        
+    }
 }

@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 
 public class Response {
-    String status;
-    String path;
-    HashMap<String, String> props;
+    public String status;
+    public String path;
+    public HashMap<String, String> props;
     Response(String status, String path, HashMap<String, String> props) {
         this.status = status;
         this.path = path;

@@ -1,4 +1,4 @@
-package Pages;
+package Client.Pages;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,9 +9,9 @@ public class LoginFrame extends JPanel implements ActionListener {
     private JTextField userText;
     private JPasswordField passwordText;
     private JButton submitButton, cancelButton;
-    private JFrame app;
+    private ApplicationInterface app;
  
-    public LoginFrame(JFrame app) {
+    public LoginFrame(ApplicationInterface app) {
         // setTitle("Login Form");
         userLabel = new JLabel("Username:");
         userText = new JTextField(20);
@@ -64,13 +64,14 @@ public class LoginFrame extends JPanel implements ActionListener {
         if (ae.getSource() == submitButton) {
             String user = userText.getText();
             String password = new String(passwordText.getPassword());
-            if (user.equals("admin") && password.equals("password")) {
-                JOptionPane.showMessageDialog(this, "Login Successful!");
-                CardLayout cl = (CardLayout) app.getContentPane().getLayout();
-                cl.next(app.getContentPane());
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password");
-            }
+            app.login(Integer.parseInt(user), password);
+            // if (user.equals("admin") && password.equals("password")) {
+            //     JOptionPane.showMessageDialog(this, "Login Successful!");
+            //     CardLayout cl = (CardLayout) app.getContentPane().getLayout();
+            //     cl.next(app.getContentPane());
+            // } else {
+            //     JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+            // }
         } else if (ae.getSource() == cancelButton) {
             System.exit(0);
         }
