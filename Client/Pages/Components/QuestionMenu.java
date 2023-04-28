@@ -20,38 +20,24 @@ public class QuestionMenu extends JPanel {
         // Util.setLocation(this, bounds, x1, y1);
         buttonSize = (int) ((getSize().width) / 4.33);
         margin = buttonSize / 3;
-        JPanel p = new JPanel();
+        JPanel p = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(margin, margin, margin, margin);
         p.setPreferredSize(new Dimension((int) ((x2 - x1) * bounds.getWidth() / 100),
                 (int) ((Math.ceil(q_length / 3)) * (margin + buttonSize) + margin)));
-        // p.setPreferredSize(new Dimension(200, 2000));
-
-        // p.setMinimumSize(this.getSize());
-        // p.setPreferredSize(this.getSize());
-        // p.setBackground(new Color(204, 240, 255));
         JScrollPane scrPane = new JScrollPane(p);
+        scrPane.setBorder(null);
         scrPane.setViewportView(p);
-        // Util.setPreferredSize(scrPane, bounds, x1, y1, x2, y2);
         scrPane.setPreferredSize(new Dimension(getPreferredSize().width, getPreferredSize().height));
-        // p.setLayout(null);
-        int val = (int) Math.ceil(q_length / 3);
-        if (val < 10)
-            val = 10;
-        p.setLayout(new GridLayout(val, 3));
-        GridLayout gl = (GridLayout) p.getLayout();
-        // gl.setHgap(5);
-        // gl.setVgap(5);
         add(scrPane);
         questionButtons = new JButton[q_length];
-        // setBorder(BorderFactory.createLineBorder(Color.black));
         for (int i = 0; i < q_length; i++) {
             questionButtons[i] = new JButton("" + i);
             questionButtons[i].setFont(Util.uiNormalFont);
-            questionButtons[i].setLocation(margin + (i % 3) * (margin + buttonSize),
-                    margin + (i / 3) * (margin + buttonSize));
-            // questionButtons[i].setSize(buttonSize, buttonSize);
-            // questionButtons[i].setMargin(new Insets(5, 5, 5, 5));
+            gbc.gridx = i % 3;
+            gbc.gridy = i / 3;
+            p.add(questionButtons[i], gbc);
             questionButtons[i].addActionListener(e -> ui.showQuestion(((JButton)e.getSource()).getText()));
-            p.add(questionButtons[i]);
         }
     }
 }
