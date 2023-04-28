@@ -72,7 +72,7 @@ public class DB {
                     "ANSWER_ID int NOT NULL, " +
                     "CONTENT text NOT NULL, " +
                     "ANSWER_TYPE int NOT NULL DEFAULT 0, " +
-                    "IS_CORRECT bool NOT NULL DEFAULT 0," +
+                    "IS_CORRECT bool NOT NULL DEFAULT False," +
                     "PRIMARY KEY (ANSWER_ID), " +
                     "FOREIGN KEY (EXAM_ID) REFERENCES EXAM(EXAM_ID), " +
                     "FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID)" +
@@ -305,8 +305,8 @@ public class DB {
     }
 
     public boolean addAnswer(Answer answer) {
-        String q = "INSERT INTO ANSWER(ANSWER_ID, CONTENT, EXAM_ID, QUESTION_ID) VALUES('" + answer.id + "', '"
-                + answer.content + "', '" + answer.exam_id + "', '" + answer.question_id + "');";
+        String q = "INSERT INTO ANSWER(ANSWER_ID, CONTENT, EXAM_ID, QUESTION_ID, IS_CORRECT) VALUES('" + answer.id + "', '"
+                + answer.content + "', '" + answer.exam_id + "', '" + answer.question_id + "', " + (answer.isCorrect? 1: 0)+");";
         return updateRow(q);
     }
 

@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 public class Connection {
     Socket s;
-    private Socket getSocket() throws UnknownHostException, IOException {
+    private Socket getSocket() throws IOException {
         if (s == null || s.isClosed()) s = new Socket("127.0.0.1", 8000);
 
         return s;
@@ -24,10 +24,9 @@ public class Connection {
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line = in.readLine();
             String[] parts = line.split(" ");
-            if (line != null && parts.length > 1) {
+            if (parts.length > 1) {
                 String type = parts[1];
                 line = in.readLine();
-                // System.out.println(line);
                 parts = line.split(" ");
                 String path = parts[0];
                 int noLines = Integer.parseInt(parts[1]);
@@ -37,7 +36,6 @@ public class Connection {
 
                 for(int i = 0; i < noLines; i++) {
                     String temp_s = in.readLine();
-                    // System.out.println(temp_s);
                     String[] temp = temp_s.split("=");
 
                     if (temp.length <= 1) {
@@ -101,6 +99,6 @@ public class Connection {
             System.out.println(answer_id);
             Response r2 = conn.getAnswer(answer_id);
             System.out.println(r2.props.get("content"));
-        };
+        }
     }
 }

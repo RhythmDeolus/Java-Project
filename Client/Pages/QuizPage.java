@@ -1,4 +1,4 @@
-package Pages;
+package Client.Pages;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,11 +10,13 @@ public class QuizPage extends JPanel {
     private JRadioButton question2Option1, question2Option2, question2Option3, question2Option4;
     private ButtonGroup question1Group, question2Group;
     private JButton submitButton;
+    private ApplicationInterface app;
 
-    public QuizPage() {
+    public QuizPage(ApplicationInterface app) {
+        this.app = app;
         // set window properties
         // setTitle("Quiz Page");
-        setSize(400, 300);
+        // setSize(400, 300);
         // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
 
@@ -86,7 +88,7 @@ public class QuizPage extends JPanel {
     }
 
     public static void main(String[] args) {
-        new QuizPage();
+        // new QuizPage();
 
     }
 }
