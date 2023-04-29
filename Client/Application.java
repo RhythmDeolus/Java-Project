@@ -18,6 +18,7 @@ public class Application extends ApplicationInterface  {
     public OnlineExamUI oeui;
     private Connection conn;
     private Dimension screenBounds;
+    private ResultPage rp;
     public Application(){
 
         conn = new Connection();
@@ -31,7 +32,13 @@ public class Application extends ApplicationInterface  {
         add(lf);
         add(oeui);
 
-        pack();
+        setAlwaysOnTop(true);
+
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+            dispose();
+            setUndecorated(true);
+            revalidate();
+        
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
@@ -51,15 +58,20 @@ public class Application extends ApplicationInterface  {
         if (r.props.containsKey("T")) {
             CardLayout cl = (CardLayout) getContentPane().getLayout();
             cl.next(getContentPane());
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-            dispose();
-            setUndecorated(true);
             setVisible(true);
+            oeui.startTimer();
         } else {
             //  login failed
             System.out.println("Login failed");
             JOptionPane.showMessageDialog(this, "Invalid Username or Password");
         }
-        
+    }
+
+    @Override
+    public void endExam(int totalQuestions, int attemptedQuestions, int totalCorrect) {
+        rp = new ResultPage(totalQuestions, attemptedQuestions, totalCorrect);
+        add(rp);
+        CardLayout cl = (CardLayout) getContentPane().getLayout();
+        cl.next(getContentPane());
     }
 }

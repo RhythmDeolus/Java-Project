@@ -3,8 +3,10 @@ package Client.Pages;
 import javax.swing.*;
 
 import Client.Backend.*;
+import Client.Pages.Components.InfoUI;
 import Client.Pages.Components.QuestionMenu;
 import Client.Pages.Components.QuestionUI;
+import Client.Pages.Components.TimerUI;
 import Client.Pages.Components.Util;
 
 import java.awt.*;
@@ -53,6 +55,9 @@ public class OnlineExamUI extends JPanel implements ActionListener {
     private ButtonGroup optionButtonGroup;
     private JButton submitBtn;
     private JButton resetBtn;
+    private JButton nextBtn;
+    private JButton prevBtn;
+    private JButton endExamBtn;
     private JLabel resultLabel;
     public String examName;
     private HashMap<Integer, Answer> answers;
@@ -67,6 +72,9 @@ public class OnlineExamUI extends JPanel implements ActionListener {
     private ApplicationInterface app;
     private Dimension screenBounds;
     private QuestionMenu qm;
+    private TimerUI timerui;
+    private InfoUI infoUI;
+    private boolean examEnded = false;
 
     public OnlineExamUI(ApplicationInterface app) {
         screenBounds = Toolkit.getDefaultToolkit().getScreenSize();
@@ -126,12 +134,17 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             System.out.println(q.statement);
         }
 
+        System.out.println("Number of questions: " + questions.length);
+
         // c = getContentPane();
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 20;
+        // gbc.insets = new Insets(0, 0, 0, 0);
+        // gbc.ipadx = 0 ;
+        // gbc.ipady = 0 ;
         gbc.weighty = 20;
         setBorder(null);
         // setLayout(new FlowLayout());
@@ -141,7 +154,7 @@ public class OnlineExamUI extends JPanel implements ActionListener {
         for (int i = 0; i < q.options.length; i++) {
             optionStrings[i] = answers.get(q.options[i]).content;
         }
-        qui = new QuestionUI(q.statement, optionStrings, screenBounds, 10, 20, 70, 80);
+        qui = new QuestionUI(q.statement, optionStrings, screenBounds,0 , 20, 80, 80, -1);
         System.out.println(qui.getSize());
         currentQuestion = questions[0];
         // qui.setSize(400, 400);
@@ -150,13 +163,14 @@ public class OnlineExamUI extends JPanel implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 20;
-        gbc.gridheight = 60;
+        gbc.gridheight = 50;
         gbc.gridwidth = 80;
         add(qui, gbc);
         gbc.anchor = GridBagConstraints.CENTER;
 
         title = new JLabel(examName, JLabel.CENTER);
         title.setFont(Util.examTitleFont);
+        title.setForeground(Util.themeColor1);
         // title.setSize(300, 30);
         // Util.setLocation(title, screenBounds, 10, 30);
         // title.setLocation(350, 30);
@@ -185,42 +199,104 @@ public class OnlineExamUI extends JPanel implements ActionListener {
         // optionButtonGroup.add(optionRadioButtons[i]);
         // c.add(optionRadioButtons[i]);
         // }
+        infoUI = new InfoUI();
+        gbc.gridx = 0;
+        gbc.gridy = 70;
+        gbc.gridheight = 10;
+        gbc.gridwidth = 80;
+        add(infoUI, gbc);
 
         gbc.fill = GridBagConstraints.NONE;
 
-        submitBtn = new JButton("Submit");
+        
+
+        submitBtn = new JButton("Mark");
+        // submitBtn.setBorder(new RoundedBorder(10));
+        submitBtn.setBackground(Util.bottomToolBarBtnColor);
+        submitBtn.setForeground(Util.fontColor1);
+
         submitBtn.setFont(Util.uiNormalFont);
         submitBtn.setSize(100, 20);
         // Util.setLocation(submitBtn, screenBounds, 20, 85);
         submitBtn.addActionListener(this);
-        gbc.gridx = 0;
+        gbc.gridx = 10;
         gbc.gridy = 80;
         gbc.gridheight = 20;
-        gbc.gridwidth = 40;
+        gbc.gridwidth = 10;
         add(submitBtn, gbc);
 
-        resetBtn = new JButton("Reset");
+        resetBtn = new JButton("Clear");
+        resetBtn.setBackground(Util.bottomToolBarBtnColor);
+        resetBtn.setForeground(Util.fontColor1);
         resetBtn.setFont(Util.uiNormalFont);
         resetBtn.setSize(100, 20);
         // Util.setLocation(resetBtn, screenBounds, 50, 85);
         resetBtn.addActionListener(this);
+        gbc.gridx = 20;
+        gbc.gridy = 80;
+        gbc.gridheight = 20;
+        gbc.gridwidth = 10;
+        add(resetBtn, gbc);
+
+        nextBtn = new JButton("Next");
+        nextBtn.setBackground(Util.bottomToolBarBtnColor);
+        nextBtn.setForeground(Util.fontColor1);
+        nextBtn.setFont(Util.uiNormalFont);
+        nextBtn.setSize(100, 20);
+        // Util.setLocation(resetBtn, screenBounds, 50, 85);
+        nextBtn.addActionListener(this);
+        gbc.gridx = 30;
+        gbc.gridy = 80;
+        gbc.gridheight = 20;
+        gbc.gridwidth = 10;
+        add(nextBtn, gbc);
+
+        prevBtn = new JButton("Previous");
+        prevBtn.setBackground(Util.bottomToolBarBtnColor);
+        prevBtn.setForeground(Util.fontColor1);
+        prevBtn.setFont(Util.uiNormalFont);
+        prevBtn.setSize(100, 20);
+        // Util.setLocation(resetBtn, screenBounds, 50, 85);
+        prevBtn.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 80;
+        gbc.gridheight = 20;
+        gbc.gridwidth = 10;
+        add(prevBtn, gbc);
+
+        endExamBtn = new JButton("End Exam");
+        endExamBtn.setBackground(Util.bottomToolBarBtnColor);
+        endExamBtn.setForeground(Util.fontColor1);
+        endExamBtn.setFont(Util.uiNormalFont);
+        endExamBtn.setSize(100, 20);
+        // Util.setLocation(resetBtn, screenBounds, 50, 85);
+        endExamBtn.addActionListener(this);
+        gbc.gridx = 70;
+        gbc.gridy = 80;
+        gbc.gridheight = 20;
+        gbc.gridwidth = 10;
+        add(endExamBtn, gbc);
+
+
         gbc.gridx = 40;
         gbc.gridy = 80;
         gbc.gridheight = 20;
-        gbc.gridwidth = 40;
-        add(resetBtn, gbc);
+        gbc.gridwidth = 30;
 
-        resultLabel = new JLabel();
-        resultLabel.setFont(Util.uiNormalFont);
-        resultLabel.setSize(300, 30);
-        resultLabel.setLocation(550, 500);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 15;
-        gbc.gridwidth = 75;
+        add(new Label(""), gbc);
+        
+
+        // resultLabel = new JLabel();
+        // resultLabel.setFont(Util.uiNormalFont);
+        // resultLabel.setSize(300, 30);
+        // resultLabel.setLocation(550, 500);
+        // gbc.gridx = 0;
+        // gbc.gridy = 0;
+        // gbc.gridheight = 15;
+        // gbc.gridwidth = 75;
         // add(resultLabel, gbc);
 
-        qm = new QuestionMenu(questions.length, screenBounds, 80, 20, 95, 95, this);
+        qm = new QuestionMenu(questions.length, screenBounds, 80, 20, 100, 80, this);
 
         gbc.gridx = 80;
         gbc.gridy = 20;
@@ -229,12 +305,24 @@ public class OnlineExamUI extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         add(qm, gbc);
 
+        timerui = new TimerUI(this, screenBounds, 80, 0, 95, 20, 5*60 + 20);
+
+        gbc.gridx = 80;
+        gbc.gridy = 0;
+        gbc.gridheight = 20;
+        gbc.gridwidth = 20;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(timerui, gbc);
+
+        setBackground(Util.uiBackgroundColor);
+
         setVisible(true);
 
         // showNextQuestion();
     }
     public void showQuestion(String newindex_s) {
         int newindex = Integer.parseInt(newindex_s);
+        newindex -= 1;
         if (newindex < questions.length) {
             // currentQuestion = questions[currentQuestionIndex];
             remove(qui);
@@ -244,14 +332,22 @@ public class OnlineExamUI extends JPanel implements ActionListener {
                 optionStrings[i] = answers.get(q.options[i]).content;
             }
             System.out.println(q.statement);
-            qui = new QuestionUI(q.statement, optionStrings, screenBounds, 10, 20, 70, 80);
+            Answer ans = markedAnswer[(newindex)%questions.length];
+            int index = -1;
+            if (ans != null) for (int i = 0; i < q.options.length; i++) {
+                if (q.options[i] == ans.id) {
+                    index = i;
+                    break;
+                }
+            }
+            qui = new QuestionUI(q.statement, optionStrings, screenBounds, 0, 20, 80, 80, index);
             currentQuestion = q;
             app.getContentPane().repaint();
             qui.setVisible(true);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 20;
-            gbc.gridheight = 60;
+            gbc.gridheight = 50;
             gbc.gridwidth = 80;
             // gbc.anchor = GridBagConstraints.NONE;
             gbc.fill = GridBagConstraints.BOTH;
@@ -261,28 +357,38 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             app.revalidate();
             app.getContentPane().repaint();
             currentQuestionIndex = newindex;
+            qm.setCurrent(currentQuestionIndex);
         }
     }
 
     private void showNextQuestion() {
         System.out.println(currentQuestionIndex);
-        if (currentQuestionIndex < questions.length -1) {
+        if (true) {
+            currentQuestionIndex %= questions.length;
             currentQuestion = questions[currentQuestionIndex];
             remove(qui);
-            Question q = questions[currentQuestionIndex + 1];
+            Question q = questions[(currentQuestionIndex + 1 )%questions.length];
             String optionStrings[] = new String[q.options.length];
             for (int i = 0; i < q.options.length; i++) {
                 optionStrings[i] = answers.get(q.options[i]).content;
             }
             System.out.println(q.statement);
-            qui = new QuestionUI(q.statement, optionStrings, screenBounds, 10, 20, 70, 80);
+            Answer ans = markedAnswer[(currentQuestionIndex + 1 )%questions.length];
+            int index = -1;
+            if (ans != null) for (int i = 0; i < q.options.length; i++) {
+                if (q.options[i] == ans.id) {
+                    index = i;
+                    break;
+                }
+            }
+            qui = new QuestionUI(q.statement, optionStrings, screenBounds, 0, 20, 80, 80, index);
             currentQuestion = q;
             app.getContentPane().repaint();
             qui.setVisible(true);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 20;
-            gbc.gridheight = 60;
+            gbc.gridheight = 50;
             gbc.gridwidth = 80;
             // gbc.anchor = GridBagConstraints.NONE;
             gbc.fill = GridBagConstraints.BOTH;
@@ -292,18 +398,37 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             app.revalidate();
             app.getContentPane().repaint();
             currentQuestionIndex++;
-        } else {
-            showResult();
+            currentQuestionIndex %= questions.length;
+            qm.setCurrent(currentQuestionIndex);
         }
     }
 
-    private void showResult() {
-        int count = 0;
-        for (Answer a: markedAnswer) {
-            System.out.println(a.isCorrect);
-            if (a != null && a.isCorrect) count++;
+    // private void showResult() {
+    //     int count = 0;
+    //     for (Answer a: markedAnswer) {
+    //         System.out.println(a.isCorrect);
+    //         if (a != null && a.isCorrect) count++;
+    //     }
+    //     JOptionPane.showMessageDialog(app, "Correct: " + count + "/" + markedAnswer.length);
+    // }
+
+    public void endExamTimer() {
+        if (!examEnded) {
+            System.out.println("Exam Ended");
+            examEnded = true;
+            int attempted = 0;
+            int total = questions.length;
+            int correct = 0;
+            for (Answer ans: markedAnswer) {
+                if (ans != null && ans.isCorrect) correct++;
+                if (ans != null) attempted++;
+            }
+            app.endExam(total, attempted, correct);
         }
-        JOptionPane.showMessageDialog(app, "Correct: " + count + "/" + markedAnswer.length);
+    }
+
+    public void startTimer() {
+        timerui.start();
     }
 
     @Override
@@ -321,7 +446,9 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             // correctAnswers++;
             // }
             int selectedIndex = qui.getSelectedIndex();
+            if (selectedIndex == -1) return;
             markedAnswer[currentQuestionIndex] = answers.get(currentQuestion.options[selectedIndex]);
+            qm.mark(currentQuestionIndex);
             showNextQuestion();
         } else if (e.getSource() == resetBtn) {
             // currentQuestionIndex = 0;
@@ -330,8 +457,15 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             // submitBtn.setEnabled(true);
             // resetBtn.setEnabled(false);
             // resultLabel.setText("");
-        } else {
-            // Do nothing
+            markedAnswer[currentQuestionIndex] = null;
+            qm.unmark(currentQuestionIndex);
+            qui.clear();
+        } else if (e.getSource() == nextBtn) {
+            showNextQuestion();
+        } else if (e.getSource() == prevBtn) {
+            if (currentQuestionIndex - 1 >= 0) showQuestion((currentQuestionIndex) + "");
+        } else if (e.getSource() == endExamBtn) {
+            endExamTimer();
         }
     }
 
