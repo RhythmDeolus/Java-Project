@@ -2,6 +2,7 @@ package Client.Pages.Components;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,13 +13,15 @@ public class QuestionUI extends JPanel{
     private JRadioButton questionOptions[];
     private ButtonGroup questionGroup;
 
-    public QuestionUI(String text, String[] options,Dimension screenBounds, int x1, int y1, int x2, int y2) {
+    public QuestionUI(String text, String[] options,Dimension screenBounds, int x1, int y1, int x2, int y2, int selected) {
         // set window properties
         // setTitle("Quiz Page");
         // setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // setLocationRelativeTo(null);
         JPanel p = new JPanel();
         Util.setPreferredSize(this, screenBounds, x1, y1, x2, y2);
+
+        // Util.setPreferredSize(p, screenBounds, x1, y1, x2, y2);
         // Util.setLocation(this, screenBounds, x1, y1);
         // setSize((int)((x2-x1)*screenBounds.getWidth() / 100), (int) ((y2 - y1) * screenBounds.getHeight()/100));
         // setLocation((int)(x1*screenBounds.getWidth()/100), (int)(y2*screenBounds.getHeight()/100));
@@ -34,7 +37,9 @@ public class QuestionUI extends JPanel{
         // setLayout(new BorderLayout());
 
         JScrollPane scrPane = new JScrollPane(p);
-        scrPane.setPreferredSize(new Dimension(getPreferredSize().width, getPreferredSize().height));
+        Util.setPreferredSize(scrPane, screenBounds, x1, y1, x2, y2);
+        Util.setPreferredSize(p, screenBounds, x1, y1, x2, y2);
+        scrPane.setBackground(Util.questionBackgroundColor);
         // scrPane.setLayout(new ScrollPaneLayout() {
         //     @Override
         //     public void layoutContainer(Container parent) {
@@ -51,6 +56,7 @@ public class QuestionUI extends JPanel{
         // create components
         // JPanel panel = new JPanel();
         questionLabel = new JLabel(text);
+        questionLabel.setBackground(Util.themeColor1);
         questionLabel.setFont(Util.questionFont);
         int size = options.length;
         questionOptions = new JRadioButton[size];
@@ -60,14 +66,19 @@ public class QuestionUI extends JPanel{
             questionOptions[i].setFont(Util.optionFont);
             questionOptions[i].setMargin(new Insets(30, 10, 0, 0));
             // questionOptions[i].setBackground(new Color(204, 240, 255));
+            questionOptions[i].setBackground(Util.themeColor1);
             questionGroup.add(questionOptions[i]);
         }
-        p.setBorder(new EmptyBorder(10, 10, 10, 10));
+        p.setBorder(new EmptyBorder(20, 70, 20, 70));
         scrPane.setBorder(null);
+        scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrPane.setAlignmentY(Component.CENTER_ALIGNMENT);
         // add components to panel
         JPanel optionUI = new JPanel();
         optionUI.setLayout(new GridLayout(questionOptions.length, 1));
+        optionUI.setBackground(Util.themeColor1);
         GridLayout gl = (GridLayout) optionUI.getLayout();
+        setBorder(new MatteBorder(0, 0, 5, 0, java.awt.Color.lightGray));
         p.add(questionLabel, BorderLayout.NORTH);
         for(int i =0; i < size; i++) {
             optionUI.add(questionOptions[i]);
@@ -78,7 +89,14 @@ public class QuestionUI extends JPanel{
         // add panel to window
         // show window
         // add(panel);
+        if (selected >= 0 && selected < questionOptions.length) questionOptions[selected].setSelected(true);
+        setBackground(Util.questionBackgroundColor);
+        p.setBackground(Util.questionBackgroundColor);
         setVisible(true);
+    }
+
+    public void clear() {
+        questionGroup.clearSelection();
     }
 
     public int getSelectedIndex() {

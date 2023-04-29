@@ -1,8 +1,11 @@
 package Client.Pages;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import Client.Pages.Components.Util;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.CardLayout;
 
 public class LoginFrame extends JPanel implements ActionListener {
     private JLabel userLabel, passwordLabel;
@@ -10,25 +13,49 @@ public class LoginFrame extends JPanel implements ActionListener {
     private JPasswordField passwordText;
     private JButton submitButton, cancelButton;
     private ApplicationInterface app;
+    private Dimension screenBounds;
  
     public LoginFrame(ApplicationInterface app) {
         // setTitle("Login Form");
-        userLabel = new JLabel("Username:");
+        userLabel = new JLabel("UserID:");
+        userLabel.setFont(Util.uiNormalFont);
         userText = new JTextField(20);
+        userText.setFont(Util.uiNormalFont);
         passwordLabel = new JLabel("Password:");
+        passwordLabel.setFont(Util.uiNormalFont);
         passwordText = new JPasswordField(20);
+        passwordText.setFont(Util.uiNormalFont);
         submitButton = new JButton("Submit");
+        submitButton.setFont(Util.uiNormalFont);
+        submitButton.setBackground(Util.bottomToolBarBtnColor);
+        submitButton.setForeground(Util.themeColor1);
         cancelButton = new JButton("Cancel");
+        cancelButton.setFont(Util.uiNormalFont);
+        cancelButton.setBackground(Util.bottomToolBarBtnColor);
+        cancelButton.setForeground(Util.themeColor1);
+        // setSize(, HEIGHT);
+
+        screenBounds = Toolkit.getDefaultToolkit().getScreenSize();
+
+        setSize((int)screenBounds.getWidth(), (int)screenBounds.getHeight());
+
+        setBackground(Util.themeColor1);
+
+        setLayout(new BorderLayout());
+        setBorder(new EmptyBorder(400, 400, 400, 400));
         this.app = app;
  
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(10, 10, 10, 10);
+        constraints.weighty = 10;
+        constraints.weighty = 10;
  
         // add components to the panel
         constraints.gridx = 0;
         constraints.gridy = 0;
+        setPreferredSize(screenBounds);
         panel.add(userLabel, constraints);
  
         constraints.gridx = 1;
@@ -49,6 +76,8 @@ public class LoginFrame extends JPanel implements ActionListener {
  
         constraints.gridy = 3;
         panel.add(cancelButton, constraints);
+
+        panel.setBackground(Util.themeColor1);
  
         // add the panel to the frame
         add(panel);
