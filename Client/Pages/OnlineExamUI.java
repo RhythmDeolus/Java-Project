@@ -75,6 +75,7 @@ public class OnlineExamUI extends JPanel implements ActionListener {
     private TimerUI timerui;
     private InfoUI infoUI;
     private boolean examEnded = false;
+    private Connection conn;
 
     public OnlineExamUI(ApplicationInterface app) {
         screenBounds = Toolkit.getDefaultToolkit().getScreenSize();
@@ -85,7 +86,7 @@ public class OnlineExamUI extends JPanel implements ActionListener {
         // setDefaultCloseOperation(EXIT_ON_CLOSE);
         // setResizable(true);
 
-        Connection conn = new Connection();
+        conn = new Connection();
 
         int exam_id = 0;
 
@@ -122,7 +123,7 @@ public class OnlineExamUI extends JPanel implements ActionListener {
                 int type = Integer.parseInt(r3.props.get("type"));
                 System.out.println(r3.props.get("isCorrect"));
                 boolean isCorrect = r3.props.get("isCorrect").equals("true");
-                Answer a = new Answer(answer_id, r3.props.get("content"), exam_id, question_id, type, isCorrect);
+                Answer a = new Answer(answer_id, r3.props.get("content"), question_id, exam_id, type, isCorrect);
                 answers.put(answer_id, a);
             }
 
@@ -420,6 +421,10 @@ public class OnlineExamUI extends JPanel implements ActionListener {
             int total = questions.length;
             int correct = 0;
             for (Answer ans: markedAnswer) {
+                if (ans != null) {
+                    System.out.println(ans.id + "," + ans.exam_id + "," + ans.question_id + "," + app.getStudentID());
+                    conn.setStudentResponse(ans.exam_id, ans.question_id, app.getStudentID(), ans.id);
+                }
                 if (ans != null && ans.isCorrect) correct++;
                 if (ans != null) attempted++;
             }

@@ -12,6 +12,7 @@ import Server.Database.Models.Answer;
 import Server.Database.Models.Exam;
 import Server.Database.Models.Question;
 import Server.Database.Models.Student;
+import Server.Database.Models.StudentResponse;
 
 public class DB {
     static DB db;
@@ -78,6 +79,19 @@ public class DB {
                     "FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID)" +
                     ");  ";
 
+            String q7 = "CREATE TABLE IF NOT EXISTS RESPONSES(  " +
+                    "EXAM_ID int  NOT NULL ,  " +
+                    "QUESTION_ID int NOT NULL,  " +
+                    "ANSWER_ID int NOT NULL, " +
+                    "STUDENT_ID int NOT NULL, " +
+                    "RESPONSE_ID int NOT NULL AUTO_INCREMENT, " +
+                    "PRIMARY KEY (RESPONSE_ID), " +
+                    "FOREIGN KEY (EXAM_ID) REFERENCES EXAM(EXAM_ID), " +
+                    "FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID), " +
+                    "FOREIGN KEY (ANSWER_ID) REFERENCES ANSWER(ANSWER_ID), " +
+                    "FOREIGN KEY (STUDENT_ID) REFERENCES STUDENT(STUDENT_ID)" +
+                    ");  ";
+
             // String q7 = "ALTER TABLE QUESTION ADD FOREIGN KEY (ANSWER_ID) REFERENCES
             // ANSWER(ANSWER_ID)";
 
@@ -86,7 +100,7 @@ public class DB {
             s1.execute(q4);
             s1.execute(q5);
             s1.execute(q6);
-            // s1.execute(q7);
+            s1.execute(q7);
 
             s1.close();
 
@@ -186,8 +200,32 @@ public class DB {
         return updateRow(q);
     }
 
+    public boolean addResponse(StudentResponse response) {
+        String q = "INSERT INTO RESPONSES(EXAM_ID, STUDENT_ID, QUESTION_ID, ANSWER_ID) VALUES("
+                + response.exam_id + ", " + response.student_id + ", "
+                + response.question_id
+                + ", " + response.answer_id + ");";
+        return updateRow(q);
+    }
+
+    public boolean hasResponse(int id) {
+        String q = "SELECT * FROM RESPONSES WHERE RESPONSE_ID='" + id + "';";
+        return hasRow(q);
+    }
+
+    public boolean deleteResponse(int id) {
+        String q = "DELETE FROM RESPONSES WHERE RESPONSE_ID='" + id + "';";
+        return updateRow(q);
+    }
+
+    public boolean studentHasResponse(int id) {
+        String q = "SELECT * FROM RESPONSES WHERE STUDENT_ID=" + id + ";";
+
+        return hasRow(q);
+    }
+
     public Object[] getQuestions(int exam_id) {
-        if (!checkConnection()) 
+        if (!checkConnection())
             return null;
         try {
             Statement s = conn.createStatement();
@@ -305,8 +343,10 @@ public class DB {
     }
 
     public boolean addAnswer(Answer answer) {
-        String q = "INSERT INTO ANSWER(ANSWER_ID, CONTENT, EXAM_ID, QUESTION_ID, IS_CORRECT) VALUES('" + answer.id + "', '"
-                + answer.content + "', '" + answer.exam_id + "', '" + answer.question_id + "', " + (answer.isCorrect? 1: 0)+");";
+        String q = "INSERT INTO ANSWER(ANSWER_ID, CONTENT, EXAM_ID, QUESTION_ID, IS_CORRECT) VALUES('" + answer.id
+                + "', '"
+                + answer.content + "', '" + answer.exam_id + "', '" + answer.question_id + "', "
+                + (answer.isCorrect ? 1 : 0) + ");";
         return updateRow(q);
     }
 

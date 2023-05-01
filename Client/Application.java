@@ -19,6 +19,7 @@ public class Application extends ApplicationInterface  {
     private Connection conn;
     private Dimension screenBounds;
     private ResultPage rp;
+    public int student_id;
     public Application(){
 
         conn = new Connection();
@@ -32,7 +33,7 @@ public class Application extends ApplicationInterface  {
         add(lf);
         add(oeui);
 
-        setAlwaysOnTop(true);
+        // setAlwaysOnTop(true);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
             dispose();
@@ -56,16 +57,26 @@ public class Application extends ApplicationInterface  {
     public void login(int id, String password) {
         Response r = conn.verifyStudent(id, password);
         if (r.props.containsKey("T")) {
+            student_id = id;
             CardLayout cl = (CardLayout) getContentPane().getLayout();
             cl.next(getContentPane());
             setVisible(true);
             oeui.startTimer();
+        } else if (r.props.containsKey("D")) {
+            System.out.println("Already Given Exam");
+            JOptionPane.showMessageDialog(this, "You have already given this exam");
         } else {
             //  login failed
             System.out.println("Login failed");
             JOptionPane.showMessageDialog(this, "Invalid Username or Password");
         }
     }
+
+    @Override
+    public int getStudentID() {
+        return student_id;
+    }
+
 
     @Override
     public void endExam(int totalQuestions, int attemptedQuestions, int totalCorrect) {
