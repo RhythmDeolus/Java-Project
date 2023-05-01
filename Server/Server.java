@@ -14,6 +14,7 @@ import Server.Database.Models.Answer;
 import Server.Database.Models.Exam;
 import Server.Database.Models.Question;
 import Server.Database.Models.Student;
+import Server.Database.Models.StudentResponse;
 
 public class Server {
     public static void main(String[] args) throws IOException {
@@ -63,7 +64,8 @@ public class Server {
                         int student_id = Integer.parseInt((String)req.props.get("student_id"));
                         String password = req.props.get("password");
                         boolean res = db.verifyPassword(student_id, password);
-                        Response.sendTextResponse(clientSocket, req.path, 1, res? "T\n": "F\n");
+                        boolean hasResponse = db.studentHasResponse(student_id);
+                        Response.sendTextResponse(clientSocket, req.path, 1, res? hasResponse? "D\n":"T\n": "F\n");
                     }
                 } else if (req.path.equals("/question")) {
                     if (req.props.containsKey("question_id")) {
@@ -87,6 +89,19 @@ public class Server {
                         Response<Exam> rs = new Response<Exam>(e);
                         rs.sendResponse(clientSocket, "/exam");
                     }
+                } else if (req.path.equals("/set_response")) {
+                    int exam_id = Integer.parseInt(req.props.get("exam_id"));
+                    int student_id = Integer.parseInt(req.props.get("student_id"));
+                    int question_id = Integer.parseInt(req.props.get("question_id"));
+                    int answer_id = Integer.parseInt(req.props.get("answer_id"));
+
+                    System.out.printf("Reponse: %d, %d, %d, %d\n", exam_id, student_id, question_id, answer_id);
+
+                    StudentResponse sr = new StudentResponse(exam_id, -1, student_id, question_id, answer_id);
+                    db.addResponse(sr);
+
+                    Response.sendTextResponse(clientSocket, req.path, 1, "T\n");
+
                 } 
 
                 clientSocket.close();

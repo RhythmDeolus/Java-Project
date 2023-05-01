@@ -91,6 +91,13 @@ public class Connection {
         return getResponse(query);
     }
 
+    public boolean setStudentResponse(int exam_id, int question_id, int student_id, int answer_id) {
+        String query = "MYPROTOCOL GET\n/set_response 4\nexam_id=" + exam_id + "\nquestion_id=" + question_id + "\nstudent_id=" + student_id + "\nanswer_id=" + answer_id  + "\n";
+        System.out.println(query);
+        Response r = getResponse(query);
+        return r.props.containsKey("T");
+    }
+
     public static void main(String[] args) {
         Connection conn = new Connection();
         Response rs = conn.getOptions(0);
