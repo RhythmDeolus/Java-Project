@@ -41,6 +41,7 @@ public class Application extends ApplicationInterface  {
         
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        // login(0, "password");
     }
     public static void main(String[] args) throws InterruptedException {
        Application a = new Application();

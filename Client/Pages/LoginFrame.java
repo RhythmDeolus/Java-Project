@@ -42,7 +42,7 @@ public class LoginFrame extends JPanel implements ActionListener {
         setBackground(Util.themeColor1);
 
         setLayout(new BorderLayout());
-        setBorder(new EmptyBorder(400, 400, 400, 400));
+        setBorder(new EmptyBorder(100, 100, 100, 100));
         this.app = app;
  
         JPanel panel = new JPanel(new GridBagLayout());
