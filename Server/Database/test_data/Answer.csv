@@ -3,7 +3,15 @@ ANSWER_ID, CONTENT, QUESTION_ID, EXAM_ID, ANSWER_TYPE, IS_CORRECT
 1, Chandigarh, 0, 0, 0, 0
 2, Mumbai, 0, 0, 0, 0
 3, Himachal Pradesh, 0, 0, 0, 0
-4, Rhythm, 1, 0, 0, 1
-5, Rhythm, 1, 0, 0, 1
-6, Rhythm, 1, 0, 0, 1
-7, Rhythm, 1, 0, 0, 1
+4, Rhythm, 1, 0, 0, 0
+5, Option 1 not possible, 1, 0, 0, 0
+6, me nhi bataunga, 1, 0, 0, 1
+7, Bahut hard question hai, 1, 0, 0, 0
+8, 5, 2, 0, 0, 0
+9, 22, 2, 0, 0, 1
+10, 6, 2, 0, 0, 0
+11, None of these, 2, 0, 0, 0 
+12, Antarctica, 3, 0, 0, 0
+13, Africa, 3, 0, 0, 0
+14, Haryana, 3, 0, 0, 1
+15, Asia, 3, 0, 0, 0

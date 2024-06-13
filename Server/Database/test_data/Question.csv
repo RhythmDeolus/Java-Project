@@ -1,3 +1,5 @@
 QUESTION_ID, STATEMENT, EXAM_ID, QUESTION TYPE
 0, Whats the capital of india?, 0,  0
 1, Who is the best coder?, 0, 0
+2, What is 2 + 2?, 0, 0
+3, South Africa is located in which continent?, 0, 0
