@@ -33,7 +33,7 @@ public class Application extends ApplicationInterface  {
         add(lf);
         add(oeui);
 
-        // setAlwaysOnTop(true);
+        setAlwaysOnTop(true);
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
             dispose();
