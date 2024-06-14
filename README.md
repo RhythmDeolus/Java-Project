@@ -1,6 +1,6 @@
 # Online Exam System :pen:
 ---
-An online exam system made in java using swing and mysql with custom protocol over TSP/IP
+An online exam system made in java using swing and mysql with custom protocol over TCP/IP
 
 ## Configuring
 `Server/Database/db.config` file is where all the mysql server configuration is stored in format
